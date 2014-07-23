@@ -13,4 +13,4 @@ A number of thingies can be combined to create an entire page of information fro
 
 The perfect use is as a note taking app in which you can create advanced lists based on tags and naming conventions.
 
-See the wiki for more.
+See https://github.com/NikolaiBird/ThingyJS/wiki for more.
