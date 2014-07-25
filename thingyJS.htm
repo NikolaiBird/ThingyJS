@@ -294,6 +294,7 @@ var dataD = [
 	"id": "What is ThingyJS?",
 	"thingy": "## Welcome to ThingyJS\n\nThingyJS is a JavaScript framework for data storage, editing, presentation and sharing. \n\nEach unit of data is called a thingy. A thingy can be a shoe size, an eye colour, an html document, a markdown file, a password, a script, a contact, a formula, a weight, an age, a code snippet, a phone number, a statistic... just about anything as long as it can be saved as a string.\n\nUsing the power of JavaScript you can create advanced filtering to find and maatch one or many thingies that are then presented to you on screen.\n\nA number of thingies can be combined to create an entire page of information from simple lists to an entire website.\n\nThe perfect use is as a note taking app in which you can create advanced lists based on tags and naming conventions.\n\n### Saving your data\n\nThe whole of ThingyJS including your thingies are stored in a single html file. When you save ThingyJS you are creating an exact copy of the ThingyJS file + any new or changed thingies. This means that your thingies come with their own reader and editor built in. All you need is a modern browser to view, filter and edit your thingies.\n\nThingyJS is an html file but it works offline.\n\n### Filters\n\n#### Quick Filters\n\n> \\#[thingyid]/[optional attributes]\n\nQuick link to a thingy.\n\n> \\#THINGYID\n\n### Filter Attributes\n\n#### Titles\n\n> \\#[thingy id]/title [optional title]\n\nAdds a title to each thingy found.\n> \\#THINGYID/title\n\nUses the thingy ID as a title.\n\n> \\#THINGYID/title SOME TITLE\n\nUses \"Some Title\" as the title.",
 	"parent": "",
+	"created": "2014-07-30T18:17",
 	"active": "true",
 	"format": "markdown",
 	"datasource": "",
@@ -306,6 +307,7 @@ var dataD = [
 	"id": "Sample Image",
 	"thingy": "<img width=\"24\" src=\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><linearGradient id='gradient'><stop offset='10%' stop-color='#F00'/><stop offset='90%' stop-color='#fcc'/> </linearGradient><rect fill='url(#gradient)' x='0' y='0' width='100%' height='100%'/></svg>\" alt=\"Red dot\" />",
 	"parent": "",
+	"created": "2014-07-30T18:17",
 	"active": "true",
 	"format": "html",
 	"datasource": "",
@@ -318,6 +320,7 @@ var dataD = [
 	"id": "_systemListAll",
 	"thingy": "List all of the thingies",
 	"parent": "",
+	"created": "2014-07-30T18:17",
 	"active": "true",
 	"format": "html",
 	"datasource": "",
@@ -480,23 +483,41 @@ var closureFilter = function(arr, filter, sort){
 }
 
 
-function parse(id, hashModel){
-    
-	
-	
+function parse(id, hashModel, altel, linked){
+
 	var filter = "el.id === '" + id + "'";
 	var row = closureFilter(dataD, filter, "");
-	
+	row = row[0];
+
 	var res = "";
-	var thingy = row[0].thingy;
-    var format = row[0].format;
-	var ignoreIncludes = row[0].ignoreIncludes;
-	var dataSource = row[0].dataSource;
+	var thingy = "";
+	
+	thingy = row.thingy;
+
+	
+
+	if(linked){ thingy = "<a href='#" + id + "'>" + thingy + "</a>";}
+
+	if(altel){
+
+		thingy = row[altel];
+		if(linked){ thingy = "<a href='#" + id + "'>" + thingy + "</a>";}
+		return thingy;
+	}
+	
+	
+	
+
+    var format = row.format;
+	var ignoreIncludes = row.ignoreIncludes;
+	var dataSource = row.dataSource;
 	
 	// Find and fill in internal thingy filters
 	//thingy = includeThingyFilters(thingy);
 	
 	thingy = tjs_toScriptTag(thingy);
+
+	
 	 
 	if(format === "none"){
 		return thingy;
@@ -643,39 +664,47 @@ function parseObject(filter, attrs){
 	var model = "";
 	var append = false;
 	var title = "_$NO TITLE$_";
+	var altel = "";
+	var linked = false;
 	for(var i = 0; i < attrs.length; i++){
 		
 		attrs[i] = $.trim(attrs[i]);
 		attrs[i] = attrs[i].replace(/\s{2,}/g,' '); // trim multiple white space in string
 		
 		if(attrs[i].substr(0, 4) === "desc"){
-			sort[0] = "desc"; sort[1] = attrs[i].substr(5, attrs[i].length);
+			sort[0] = "desc"; sort[1] = $.trim(attrs[i].substr(5, attrs[i].length));
 		}
 		if(attrs[i].substr(0, 3) === "asc"){
-			sort[0] = "asc"; sort[1] = attrs[i].substr(4, attrs[i].length);
+			sort[0] = "asc"; sort[1] = $.trim(attrs[i].substr(4, attrs[i].length));
 		}
 		if(attrs[i].substr(0, 5) === "title"){
 			title = attrs[i].substr(6, attrs[i].length);
 			title = $.trim(title);
 		}
+		if(attrs[i].substr(0, 5) === "altel"){
+			altel = $.trim(attrs[i].substr(6, attrs[i].length));
+		}
+		if(attrs[i].substr(0, 6) === "linked"){
+			linked = true;
+		}
 		if(attrs[i].substr(0, 6) === "append"){
 			append = true;
 		}
 		if(attrs[i].substr(0, 6) === "header"){
-			header = attrs[i].substr(7, attrs[i].length);
+			header = $.trim(attrs[i].substr(7, attrs[i].length));
 		}
 		if(attrs[i].substr(0, 6) === "footer"){
-			footer = attrs[i].substr(7, attrs[i].length);
+			footer = $.trim(attrs[i].substr(7, attrs[i].length));
 		}
 		if(attrs[i].substr(0, 5) === "model"){
-			model = attrs[i].substr(6, attrs[i].length);
+			model = $.trim(attrs[i].substr(6, attrs[i].length));
 		}
 		if(attrs[i].substr(0, 11) === "thingymodel"){
 			model = attrs[i].substr(12, attrs[i].length);
 			model = hashChange($.trim(model));
 		}
 		if(attrs[i].substr(0, 9) === "metamodel"){
-			model = attrs[i].substr(10, attrs[i].length);
+			model = $.trim(attrs[i].substr(10, attrs[i].length));
 			
 			model = dataD.filter(function(el){
 				return el.id === model;
@@ -691,11 +720,12 @@ function parseObject(filter, attrs){
 	for(var i = 0; i < row.length; i++) {
 		if(header){
 			tt += parse(header);
-		
 		}
 		
-		tt += parse(row[i].id, model);
-		
+		tt += parse(row[i].id, model, altel, linked);
+
+
+
 		// Add the title if requested in the filter attributes
 		if(title === "_$NO TITLE$_"){
 			// No title - do nothing
@@ -704,6 +734,8 @@ function parseObject(filter, attrs){
 		}else{
 			tt = "<h1>"+title+"</h1>"+tt;
 		}
+		
+
 		
 		if(footer){
 			tt += parse(footer);
@@ -715,6 +747,7 @@ function parseObject(filter, attrs){
 		clearScreen();
 	}
 	
+
 	
 	
 	return tt;
