@@ -42,6 +42,9 @@ The above copyright notice and this permission notice shall be included in all c
 <body>
 
 
+
+<div style="display:inline;" id="tjs-pagecss"></div>
+<div style="display:inline;" id="tjs-pageeditorheader"></div>
 <div style="display:inline;" id="tjs-pageheader"></div>
 <div style="display:inline;" id="tjs-filterresults"></div>
 <div style="display:inline;" id="tjs-pagefooter"></div>
@@ -71,9 +74,23 @@ var thingyData = [
     "fields": {}
 },
 {
+    "id": "_systemCSS",
+    "thingy": "[[_systemPure]]",
+    "about":"This thingy is the header that precedes the main content.",
+    "parent":"",
+    "created": "2014-07-30T18:17",
+    "active": true,
+    "format":"html",
+    "dataSource":"",
+	"ignoreIncludes":false,
+    "sort":0,
+	"tags": [],
+    "fields": {}
+},
+{
     "id": "_systemHeader",
-    "thingy": "[[_systemPure]]<div class=\"pure-menu pure-menu-open pure-menu-horizontal\">\n    <ul>\n  <li class=\"pure-menu-selected\"><a href=\"#_systemMain\">Home</a></li>\n<li><a href=\"#el.id=='_systemEdit'/model {'id':'Note 2'}\">Edit1</a></li>\n        <li><a href=\"#el.id=='_systemEdit'/thingymodel Get Model\" title=\"Using a seperate thingy to get the model\">Edit2</a></li>\n        <li><a href=\"#el.id=='_systemEdit'/metamodel Note 2\" title=\"Using Metamodel\">Edit3</a></li>\n        <li><a href=\"#_systemDelete/model {'id':'Note 100'}\" title=\"Using ID\">Delete</a></li>\n        <li><a href=\"#_systemEdit/model {'id':''}\">New</a></li>\n        <li><a href=\"#_systemEdit/model {'id':''}\">New</a></li>\n        <li><a href=\"#_systemAlert/model {'alert':'Hello'}/append\">Alert</a></li>\n        <li><a href=\"#_systemLog/model {'log':'Logged'}/append\">Log</a></li>\n        <li><a href=\"#_systemDump/append\">Dump</a></li>\n        <li><a href=\"#_systemSave\">Save</a></li>\n    </ul>\n</div>",
-    "about":"This thingy is the header that preceeds the main content.",
+    "thingy": "<div></div>",
+    "about":"This thingy is the header that precedes the main content.",
     "parent":"",
     "created": "2014-07-30T18:17",
     "active": true,
@@ -88,6 +105,20 @@ var thingyData = [
     "id": "_systemFooter",
     "thingy": "<div>System Footer Stuff</div>",
     "about":"This thingy is the footer that comes after the main content.",
+    "parent":"",
+    "created": "2014-07-30T18:17",
+    "active": true,
+    "format":"html",
+    "dataSource":"",
+	"ignoreIncludes":false,
+    "sort":0,
+	"tags": [],
+    "fields": {}
+},
+{
+    "id": "_systemEditorHeader",
+    "thingy": "[[_systemPure]]<div class=\"pure-menu pure-menu-open pure-menu-horizontal\">\n    <ul>\n  <li class=\"pure-menu-selected\"><a href=\"#_systemMain\">Home</a></li>\n<li><a href=\"#el.id=='_systemEdit'/model {'id':'Note 2'}\">Edit1</a></li>\n        <li><a href=\"#el.id=='_systemEdit'/thingymodel Get Model\" title=\"Using a seperate thingy to get the model\">Edit2</a></li>\n        <li><a href=\"#el.id=='_systemEdit'/metamodel Note 2\" title=\"Using Metamodel\">Edit3</a></li>\n        <li><a href=\"#_systemDelete/model {'id':'Note 100'}\" title=\"Using ID\">Delete</a></li>\n        <li><a href=\"#_systemEdit/model {'id':''}\">New</a></li>\n        <li><a href=\"#_systemEdit/model {'id':''}\">New</a></li>\n        <li><a href=\"#_systemAlert/model {'alert':'Hello'}/append\">Alert</a></li>\n        <li><a href=\"#_systemLog/model {'log':'Logged'}/append\">Log</a></li>\n        <li><a href=\"#_systemDump/append\">Dump</a></li>\n        <li><a href=\"#_systemSave\">Save</a></li>\n    </ul>\n</div>",
+    "about":"This thingy is the header that preceeds the main content.",
     "parent":"",
     "created": "2014-07-30T18:17",
     "active": true,
@@ -724,6 +755,9 @@ function thingyParseObject(filter, attrs){
 			model = attrs[i].substr(12, attrs[i].length);
 			model = thingyHashChange($.trim(model));
 		}
+		//if(attrs[i].substr(0, 4) === "mode"){
+		//	thingyMode = $.trim(attrs[i].substr(5, attrs[i].length));
+		//}
 		if(attrs[i].substr(0, 9) === "metamodel"){
 			model = $.trim(attrs[i].substr(10, attrs[i].length));
 			
@@ -764,7 +798,7 @@ function thingyParseObject(filter, attrs){
 		}
 	}
 	
-	if(!append && filter !== "_systemHeader" && filter !== "_systemFooter"){
+	if(!append && filter !== "_systemHeader" && filter !== "_systemFooter" && filter !== "_systemCSS" && filter !== "_systemEditorHeader"   ){
 		thingyClearScreen();
 	}
 	
@@ -795,6 +829,9 @@ function thingyHashChange(hash){
 
 
 function thingyUpdateScreen(hash){
+	
+	thingyModeCheck();
+	
 	if(hash.substr(0, 11) === "_systemSave"){
 		// For now this has to be hard coded. Getting infinite loop when cloning the code when in a thingy
 		thingySaveThingy();
@@ -805,6 +842,10 @@ function thingyUpdateScreen(hash){
 				$("#tjs-pageheader").html(h);
 			}else if($.trim(hash) === "_systemFooter"){
 				$("#tjs-pagefooter").html(h);
+			}else if($.trim(hash) === "_systemCSS"){
+				$("#tjs-pagecss").html(h);
+			}else if($.trim(hash) === "_systemEditorHeader"){
+				$("#tjs-pageeditorheader").html(h);
 			}else{
 				$("#tjs-filterresults").append(h);
 			}
@@ -924,6 +965,26 @@ thingyDrawEdit = function(model){
 	var thingy = template(model);
 	$("#tjs-filterresults").append(thingy);
 }
+
+
+thingyUpdateScreen("_systemCSS");
+
+// Check for mode setting
+function thingyModeCheck(){
+	if(window.location.hash.search("/editormode") > -1 && thingyMode !== "editor"){
+		thingyMode = "editor";
+		$("#tjs-pageeditorheader").html("");
+		thingyUpdateScreen("_systemEditorHeader")
+		window.location.hash = window.location.hash.replace("/editormode","");
+	}
+	if(window.location.hash.search("/blankmode") > -1 && thingyMode !== "blank"){
+		thingyMode = "blank";
+		$("#tjs-pageeditorheader").html("");
+		window.location.hash = window.location.hash.replace("/blankmode","");
+	}
+}; thingyModeCheck();
+
+if(thingyMode === "editor"){thingyUpdateScreen("_systemEditorHeader")};
 
 if(window.location.hash.substring(1) === ""){
 	window.location.hash = "#_systemMain";
