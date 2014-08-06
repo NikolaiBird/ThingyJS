@@ -43,7 +43,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 
 <div style="display:inline;" id="tjs-pagecss"></div>
-<div style="display:inline;" id="tjs-pageeditorheader"></div>
+<!-- div style="display:inline;" id="tjs-pageeditorheader"></div -->
 <div style="display:inline;" id="tjs-pageheader"></div>
 <div style="display:inline;" id="tjs-filterresults"></div>
 <div style="display:inline;" id="tjs-pagefooter"></div>
@@ -60,7 +60,7 @@ The above copyright notice and this permission notice shall be included in all c
 var thingyData = [
 {
     "id": "MainThingy",
-    "thingy": "[[header]][[Sample Image]] [[Note 4]]{{#each model}}<div>Value: {{thingy}}</div>{{else}}<div>None</div>{{/each}}[[What is ThingyJS?]]",
+    "thingy": "[[Sample Image]] [[Note 4]]{{#each model}}<div>Value: {{thingy}}</div>{{else}}<div>None</div>{{/each}}[[What is ThingyJS?]]",
     "about":"ThingyJS default thingy. This thingy is called on startup.",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -79,7 +79,7 @@ var thingyData = [
 },
 {
     "id": "_systemHeader",
-    "thingy": "<div></div>",
+    "thingy": "<div>poop</div>",
     "about":"This thingy is the header that precedes the main content.",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -150,7 +150,7 @@ var thingyData = [
     "format":"html",
     "dataSource":"",
 	"ignoreIncludes":false,
-    "sort":0,
+    "sort":1000,
 	"tags": [],
 	"homepage": false,
 	"systemHeader": false,
@@ -163,7 +163,7 @@ var thingyData = [
 },
 {
     "id": "header",
-    "thingy": "<h1>TITLE!!!</h1>",
+    "thingy": "<hr>",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -173,6 +173,34 @@ var thingyData = [
 	"ignoreIncludes":false,
     "sort":1,
 	"tags": [],
+	"homepage": false,
+	"systemHeader": false,
+	"thingyHeader": true,
+	"systemFooter": false,
+	"thingyFooter": false,
+	"systemCSS": false,
+	"editModeOnly":false,
+    "fields": {}
+},
+{
+    "id": "footer",
+    "thingy": "<br>---------------------<br>",
+    "about":"",
+    "parent":"",
+    "created": "2014-07-30T18:17",
+    "active": true,
+    "format":"thingy",
+    "dataSource":"",
+	"ignoreIncludes":false,
+    "sort":1,
+	"tags": [],
+	"homepage": false,
+	"systemHeader": false,
+	"thingyHeader": false,
+	"systemFooter": false,
+	"thingyFooter": true,
+	"systemCSS": false,
+	"editModeOnly":false,
     "fields": {}
 },
 {
@@ -199,8 +227,15 @@ var thingyData = [
     "format":"html",
     "dataSource":"",
 	"ignoreIncludes":false,
-	"sort":2,
+	"sort":5,
     "tags": ["green","red"],
+	"homepage": true,
+	"systemHeader": false,
+	"thingyHeader": false,
+	"systemFooter": false,
+	"thingyFooter": false,
+	"systemCSS": false,
+	"editModeOnly":false,
     "fields": {}
 },
 {
@@ -215,6 +250,13 @@ var thingyData = [
 	"ignoreIncludes":false,
 	"sort":3,
     "tags": ["green","red"],
+	"homepage": true,
+	"systemHeader": false,
+	"thingyHeader": false,
+	"systemFooter": false,
+	"thingyFooter": false,
+	"systemCSS": false,
+	"editModeOnly":false,
     "fields": {}
 },
 {
@@ -427,7 +469,6 @@ var thingyData = [
 
 <script>
 
-	
 
     /*
     Can be used to keep notes, create templates that populate from notes, can traverse via url, can query via url
@@ -767,7 +808,7 @@ function thingyAutoLinks(thingy){
 
 //thingyParseObject(filter, attrs)
 //This takes the filter and attributes and returns the full result to be entered into the dom
-function thingyParseObject(filter, attrs, include){
+function thingyParseObject(filter, attrs, include, level, section){
 	
 	var sort = [];
 	var header = "";
@@ -791,6 +832,9 @@ function thingyParseObject(filter, attrs, include){
 		if(attrs[i].substr(0, 5) === "title"){
 			title = attrs[i].substr(6, attrs[i].length);
 			title = $.trim(title);
+		}
+		if(attrs[i].substr(0, 7) === "notitle"){
+			title = "_$NO TITLE$_";
 		}
 		if(attrs[i].substr(0, 5) === "altel"){
 			altel = $.trim(attrs[i].substr(6, attrs[i].length));
@@ -830,29 +874,41 @@ function thingyParseObject(filter, attrs, include){
 	var tt = "";
 	for(var i = 0; i < row.length; i++) {
 		
-		if(thingyMode === "editmode" && !include && row[i].id.substr(0, 7) !== "_system"){
-			tt += thingyParse("_systemEditorSubHeader",null,null,null,{"_parentid":row[i].id});
-		}
-		if(header){
-			tt += thingyParse(header);
+		// Include thingy headers
+		if(level === 1 && section === "tjs-filterresults"){
+			if(thingyMode === "editmode"){
+				var r = thingyClosureFilter(thingyData, "el.thingyHeader===true", ["desc", "sort"]);
+			}else{
+				var r = thingyClosureFilter(thingyData, "el.thingyHeader===true && el.editModeOnly !== true", ["desc", "sort"]);
+			}
+			for(var n = 0; n < r.length; n++){
+				tt += thingyParse(r[n].id,null,null,null,{"_parentid":row[i].id});
+			}
 		}
 		
-		tt += thingyParse(row[i].id, model, altel, linked);
-
+		// TODO: Add header(attr) here and footer after 
+		
 		// Add the title if requested in the filter attributes
 		if(title === "_$NO TITLE$_"){
 			// No title - do nothing
 		}else if(title === ""){
-			tt = "<h1>"+row[i].id+"</h1>"+tt;
+			tt += "<h1>"+row[i].id+"</h1>";
 		}else{
-			tt = "<h1>"+title+"</h1>"+tt;
+			tt += "<h1>"+title+"</h1>";
 		}
 		
-
-		
-		if(footer){
-			tt += thingyParse(footer);
-		
+		tt += thingyParse(row[i].id, model, altel, linked);
+			
+		// Include thingy footer
+		if(level === 1 && section === "tjs-filterresults"){
+			if(thingyMode === "editmode"){
+				var r = thingyClosureFilter(thingyData, "el.thingyFooter===true", ["desc", "sort"]);
+			}else{
+				var r = thingyClosureFilter(thingyData, "el.thingyFooter===true && el.editModeOnly !== true", ["desc", "sort"]);
+			}
+			for(var n = 0; n < r.length; n++){
+				tt += thingyParse(r[n].id,null,null,null,{"_parentid":row[i].id});
+			}
 		}
 	}
 	
@@ -863,7 +919,7 @@ function thingyParseObject(filter, attrs, include){
 	return tt;
 }
 
-function thingyHashChange(hash, include){
+function thingyHashChange(hash, include,level, section){
 	// include is either true or false indicating whether or not this is an include or not.
 	var res = "";
 
@@ -875,7 +931,7 @@ function thingyHashChange(hash, include){
 		var filter = attrs[0];
 		attrs.shift();
 		
-		res += thingyParseObject(filter, attrs, include);
+		res += thingyParseObject(filter, attrs, include, level, section);
 	}
 	
 	return res;
@@ -883,9 +939,19 @@ function thingyHashChange(hash, include){
 }
 
 
-function thingyUpdateScreen(hash, section){
+function thingyUpdateScreen(hash,section,level){
 	
-	if(!section){section = "tjs-filterresults";}
+	if(!hash){
+		//hash = "#el.id=='MainThingy'";
+		if(thingyMode === "editmode"){
+			hash = "#el.homepage === true/desc sort";
+		}else{
+			//var r = thingyClosureFilter(thingyData, "el.systemCSS===true && el.editModeOnly !== true", ["desc", "sort"]);
+			hash = "#el.homepage === true && el.editModeOnly !== true/desc sort";
+		}
+	}
+	
+	if(!section){var section = "tjs-filterresults";}
 	
 	thingyModeCheck();
 	
@@ -893,20 +959,10 @@ function thingyUpdateScreen(hash, section){
 		// For now this has to be hard coded because I am getting infinite loop when cloning the code when in a thingy
 		thingySaveThingy();
 	}else{
-		var thingy = thingyHashChange(hash);
-		//alert(hash);
+		var thingy = thingyHashChange(hash,null,level, section);
+		
 		if(thingy){
-			/*
-			if($.trim(hash) === "_systemHeader"){
-				$("#tjs-pageheader").html(thingy);
-			}else if($.trim(hash) === "_systemFooter"){
-				$("#tjs-pagefooter").html(thingy);
-			}else if($.trim(hash) === "_systemEditorHeader"){
-				$("#tjs-pageeditorheader").html(thingy);
-			}else{
-				$("#tjs-filterresults").append(thingy);
-			}
-			*/
+			
 			$("#"+section).append(thingy);
 			
 		}
@@ -916,6 +972,12 @@ function thingyUpdateScreen(hash, section){
 thingyClearScreen = function(){
 	$("#tjs-filterresults").html("");
 }
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// EDITING, DELETING AND SAVING ///////////////////////////////////
 
 thingyDelete = function(id){
 	for(var i = 0; i<thingyData.length; i++){
@@ -990,27 +1052,93 @@ thingyDrawEdit = function(model){
 		htm+= "<label for='editcreated'>Created:</label> <input type='datetime-local' value='{{created}}' name='editcreated' id='editcreated' >"
 	htm+= "</div>";
 	
-	if(model.active){
-		htm+= "Active: <select id='editactive'><option value=true selected>true</option><option value=false>false</option></select><br>";
-	}else{
-		htm+= "Active: <select id='editactive'><option value=true >true</option><option value=false selected>false</option></select><br>";
-	}
+	htm+= "<div class='pure-control-group'>";
+		if(model.active){
+			htm+= "<label for='editactive'>Active:</label> <select id='editactive'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='editactive'>Active:</label> <select id='editactive'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	
 	if(model.format==="none"){var none = "selected"}else{var none = ""}
 	if(model.format==="thingy" || model.format===""){var thingy = "selected"}else{var thingy = ""}
 	if(model.format==="html"){var html = "selected"}else{var html = ""}
 	if(model.format==="markdown"){var markdown = "selected"}else{var markdown = ""}
 	if(model.format==="handlebars"){var handlebars = "selected"}else{var handlebars = ""}
-	//if(model.format==="script"){var script = "selected"}else{var script = ""}
-	htm+= "Format: <select id='editformat'><option value='thingy' "+thingy+">thingy</option><option value='html' "+html+">html</option><option value='markdown' "+markdown+">markdown</option><option value='handlebars' "+handlebars+">handlebars</option><option value='none' "+none+">none</option></select><br>";
-	htm+= "Data Source: <input type='text' value='{{dataSource}}' id='editdatasource'><br>";
-	if(model.ignoreIncludes){
-		htm+= "Ignore Includes: <select id='editignoreincludes'><option value=true selected>true</option><option value=false>false</option></select><br>";
-	}else{
-		htm+= "Ignore Includes: <select id='editignoreincludes'><option value=true >true</option><option value=false selected>false</option></select><br>";
-	}
-	htm+= "Sort: <input type='number' id='editsort' value='{{sort}}'> <br>";
-	htm+= "tags: <input type='text' value='{{tags}}' id='edittags'> [] or [\"green\",\"red\"]<br>";
-	htm+= "fields: <input type='text' value='{{fields}}' id='editfields'> {} or {\"key1\":\"value1\", \"key2\":\"value2\"}<br>";
+	htm+= "<div class='pure-control-group'>";
+		htm+= "<label for='editformat'>Format:</label> <select id='editformat'><option value='thingy' "+thingy+">thingy</option><option value='html' "+html+">html</option><option value='markdown' "+markdown+">markdown</option><option value='handlebars' "+handlebars+">handlebars</option><option value='none' "+none+">none</option></select>";
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		htm+= "<label for='editdatasource'>Data Source:</label> <input type='text' value='{{dataSource}}' id='editdatasource'>";
+	htm+= "</div>";
+	
+	htm+= "<div class='pure-control-group'>";
+		if(model.ignoreIncludes){
+			htm+= "<label for='editignoreincludes'>Ignore Includes:</label> <select id='editignoreincludes'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='editignoreincludes'>Ignore Includes:</label> <select id='editignoreincludes'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		htm+= "<label for='editsort'>Sort:</label> <input type='number' id='editsort' value='{{sort}}'> <br>";
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		htm+= "<label for='edittags'>tags:</label> <input type='text' value='{{tags}}' id='edittags'> [] or [\"green\",\"red\"]<br>";
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		htm+= "<label for='editfields'>fields:</label> <input type='text' value='{{fields}}' id='editfields'> {} or {\"key1\":\"value1\", \"key2\":\"value2\"}<br>";
+	htm+= "</div>";
+	
+	htm+= "<div class='pure-control-group'>";
+		if(model.homepage){
+			htm+= "<label for='edithomepage'>On Homepage:</label> <select id='edithomepage'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='edithomepage'>On Homepage:</label> <select id='edithomepage'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		if(model.systemHeader){
+			htm+= "<label for='editsystemheader'>System Header:</label> <select id='editsystemheader'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='editsystemheader'>System Header:</label> <select id='editsystemheader'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		if(model.thingyHeader){
+			htm+= "<label for='editthingyheader'>Thingy Header:</label> <select id='editthingyheader'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='editthingyheader'>Thingy Header:</label> <select id='editthingyheader'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		if(model.systemFooter){
+			htm+= "<label for='editsystemfooter'>System Footer:</label> <select id='editsystemfooter'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='editsystemfooter'>System Footer:</label> <select id='editsystemfooter'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		if(model.thingyFooter){
+			htm+= "<label for='editthingyfooter'>Thingy Footer:</label> <select id='editthingyfooter'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='editthingyfooter'>Thingy Footer:</label> <select id='editthingyfooter'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		if(model.systemCSS){
+			htm+= "<label for='editsystemcss'>System CSS:</label> <select id='editsystemcss'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='editsystemcss'>System CSS:</label> <select id='editsystemcss'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	htm+= "<div class='pure-control-group'>";
+		if(model.editModeOnly){
+			htm+= "<label for='editeditmodeonly'>Edit Mode Only:</label> <select id='editeditmodeonly'><option value=true selected>true</option><option value=false>false</option></select>";
+		}else{
+			htm+= "<label for='editeditmodeonly'>Edit Mode Only:</label> <select id='editeditmodeonly'><option value=true >true</option><option value=false selected>false</option></select>";
+		}
+	htm+= "</div>";
+	
 	
 	htm+= "<div class='pure-controls'>";
 	htm+= "<button class='thingybutton pure-button pure-button-primary' data-thingy='save {{id}}'>Save</button>";
@@ -1056,18 +1184,8 @@ function log(txt){
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-
-function thingyWriteAllCssThingies(){
-	// Clear the css section
-	$("#tjs-pagecss").html("");
-	
-	var r = thingyClosureFilter(thingyData, "el.systemCSS===true", ["desc", "sort"]);
-	for(var i = 0; i < r.length; i++){
-		thingyUpdateScreen(r[i].id, "tjs-pagecss")
-	}
-}; thingyWriteAllCssThingies();
-
-
+/////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// UPDATE SCREEN SECTION //////////////////////////////////////////
 
 
 // Check for mode setting
@@ -1086,33 +1204,70 @@ function thingyModeCheck(){
 	
 }; thingyModeCheck();
 
+// Write the CSS thingies
+function thingyWriteAllCssThingies(){
+	// Clear the css section
+	$("#tjs-pagecss").html("");
+	
+	//var r = thingyClosureFilter(thingyData, "el.systemCSS===true", ["desc", "sort"]);
+	if(thingyMode === "editmode"){
+		var r = thingyClosureFilter(thingyData, "el.systemCSS===true", ["desc", "sort"]);
+	}else{
+		var r = thingyClosureFilter(thingyData, "el.systemCSS===true && el.editModeOnly !== true", ["desc", "sort"]);
+	}
+	for(var i = 0; i < r.length; i++){
+		thingyUpdateScreen(r[i].id, "tjs-pagecss")
+	}
+}; thingyWriteAllCssThingies();
+
+// Write the system headers
+function thingyWriteAllSystemHeaders(){
+	// Clear the css section
+	$("#tjs-pageheader").html("");
+	
+	if(thingyMode === "editmode"){
+		var r = thingyClosureFilter(thingyData, "el.systemHeader===true", ["desc", "sort"]);
+	}else{
+		var r = thingyClosureFilter(thingyData, "el.systemHeader===true && el.editModeOnly !== true", ["desc", "sort"]);
+	}
+	for(var i = 0; i < r.length; i++){
+		thingyUpdateScreen(r[i].id, "tjs-pageheader")
+	}
+	//alert(thingyMode);
+}; thingyWriteAllSystemHeaders();
 
 
 
-if(thingyMode === "editmode"){thingyUpdateScreen("_systemEditorHeader", "tjs-pageeditorheader")};
+// Write the system footers
+function thingyWriteAllSystemFooter(){
+	// Clear the css section
+	$("#tjs-pagefooter").html("");
+	
+	if(thingyMode === "editmode"){
+		var r = thingyClosureFilter(thingyData, "el.systemFooter===true", ["desc", "sort"]);
+	}else{
+		var r = thingyClosureFilter(thingyData, "el.systemFooter===true && el.editModeOnly !== true", ["desc", "sort"]);
+	}
+	for(var i = 0; i < r.length; i++){
+		thingyUpdateScreen(r[i].id, "tjs-pagefooter")
+	}
+	
+}; thingyWriteAllSystemFooter();
 
-/*
-if(window.location.hash.substring(1) === ""){
-	window.location.hash = "#MainThingy";
-}
-*/
-
-//thingyUpdateScreen("_systemHeader");
-thingyUpdateScreen(window.location.hash.substring(1));
-//thingyUpdateScreen("_systemFooter");
 
 
+thingyUpdateScreen(window.location.hash.substring(1),null,1);
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 $(window).on('hashchange',function(){
-	thingyWriteAllCssThingies();
-	thingyUpdateScreen(window.location.hash.substring(1))
+	//thingyWriteAllCssThingies();
+	thingyUpdateScreen(window.location.hash.substring(1),null,1);
 });
 
-
 </script>
-
 
 </body>
 </html>
