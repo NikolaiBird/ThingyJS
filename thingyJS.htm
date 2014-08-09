@@ -57,7 +57,7 @@ The above copyright notice and this permission notice shall be included in all c
 var thingyData = [
 {
     "id": "MainThingy",
-    "thingy": "[[Sample Image]] [[Note 4]]{{#each model}}<div>Value: {{thingy}}</div>{{else}}<div>None</div>{{/each}}[[What is ThingyJS?]]",
+    "thingy": "<js>thingyData.length</js>[[Sample Image]] [[Note 4]]{{#each model}}<div>Value: <b>{{id}}</b>: {{thingy}}</div>{{else}}<div>None</div>{{/each}}[[What is ThingyJS?]]",
     "about":"ThingyJS default thingy. This thingy is called on startup.",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -353,7 +353,7 @@ var thingyData = [
 },
 {
     "id": "_systemEdit",
-    "thingy": "<$cript>thingyDrawEdit('{{model.id}}')</$cript>",
+    "thingy": "<js>thingyDrawEdit('{{model.id}}')</js>",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -669,6 +669,8 @@ function thingyParse(id, hashModel, altel, linked, keys){
 	// linked is when for example you only show the id of a thingy and want that id to link to the full thingy.
 	// keys look like this: {"_parentid":"value"}
 	
+	//alert(id + " | " + hashModel);
+	
 	var filter = "el.id === '" + id + "'";
 	var row = thingyClosureFilter(thingyData, filter, "");
 	row = row[0];
@@ -699,8 +701,8 @@ function thingyParse(id, hashModel, altel, linked, keys){
 	var ignoreIncludes = row.ignoreIncludes;
 	var dataSource = row.dataSource;
 	
-	thingy = thingyToScriptTag(thingy);
-
+	
+	
 	if(format === "none"){
 		return thingy;
 	}else if(format === "" || format === "thingy"){
@@ -708,18 +710,23 @@ function thingyParse(id, hashModel, altel, linked, keys){
 		thingy = thingyFormatting(thingy);
 		thingy = thingyLinks(thingy);
 		thingy = thingyAutoLinks(thingy);
-		
+		thingy = thingyScripts(thingy); // Run internal scripts. <js></js>
+		thingy = thingyToScriptTag(thingy);
 		return thingy;
 	}else if(format === "html"){
 		if(!ignoreIncludes){thingy = thingyIncludeFilters(thingy, keys);} // Find and fill in internal thingy filters
+		thingy = thingyScripts(thingy); // Run internal scripts. <js></js>
+		thingy = thingyToScriptTag(thingy);
 		return thingy;
 	}else if(format === "markdown"){
+		if(!ignoreIncludes){thingy = thingyIncludeFilters(thingy, keys);} // Find and fill in internal thingy filters
 		var converter = new Markdown.Converter();
 		thingy = converter.makeHtml(thingy);
-		if(!ignoreIncludes){thingy = thingyIncludeFilters(thingy, keys);} // Find and fill in internal thingy filters
+		thingy = thingyScripts(thingy); // Run internal scripts. <js></js>
+		thingy = thingyToScriptTag(thingy);
 		return thingy;
 	}else if(format === "handlebars"){
-		
+		if(!ignoreIncludes){thingy = thingyIncludeFilters(thingy, keys)} // Find and fill in internal thingy filters
         var template = Handlebars.compile(thingy);
         
 		var model = {};
@@ -743,8 +750,8 @@ function thingyParse(id, hashModel, altel, linked, keys){
 		
 		thingy = template(model) ;
 		
-		if(!ignoreIncludes){thingy = thingyIncludeFilters(thingy, keys)} // Find and fill in internal thingy filters
-		
+		thingy = thingyScripts(thingy); // Run internal scripts. <js></js>
+		thingy = thingyToScriptTag(thingy);
 		return thingy;
     }
 	
@@ -809,11 +816,36 @@ function thingyLinks(thingy){
 	return thingy;
 }
 
+
+function thingyScripts(thingy){
+	//alert(thingy);
+	//if(thingy.search(/<js>.*<\/js>/) >-1){alert("found");}
+	
+	var cnt = 0;
+	while(thingy.search(/<js>.*<\/js>/) >-1 && cnt <= 1000){
+		
+		var ff1 = thingy.split("<js>");
+		var ff2 = ff1[1].split("</js>");
+		var fullFilter = ff2[0];
+		var filter = $.trim(fullFilter);
+		var fill = "";
+		
+		if(!fill){
+			fill = eval(filter);
+		}
+		
+		thingy = thingy.replace("<js>" + fullFilter + "</js>", fill);
+		
+		cnt++;	
+	}
+	
+	if(cnt >= 1000){log("WARNING: thingyScripts() probably had to break out of an infinite loop.");}
+	
+	return thingy;
+}
+
 // Find and fill in internal thingy filters
-function thingyIncludeFilters(thingy, keys){
-	
-	
-	
+function thingyIncludeFilters(thingy, keys){	
 	var cnt = 0;
 	while(thingy.search(/\[\[.*\]\]/) >-1 && cnt <= 1000){
 		
@@ -869,6 +901,7 @@ function thingyParseObject(filter, attrs, include, level, section){
 	var linked = "";
 	var nothingyheader = false; // ignore thingyheaders
 	var nothingyfooter = false; // ignore thingyfooters
+	
 	
 	for(var i = 0; i < attrs.length; i++){
 		
@@ -1047,6 +1080,9 @@ thingyClearScreen = function(){
 	$("#tjs-filterresults").html("");
 }
 
+function thingyWrite(e){
+	return e;	
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1250,7 +1286,8 @@ thingyDrawEdit = function(model){
 	
 	var template = Handlebars.compile(htm);
 	var thingy = template(model);
-	$("#tjs-filterresults").append(thingy);
+	//$("#tjs-filterresults").append(thingy);
+	return thingy;
 }
 
 
