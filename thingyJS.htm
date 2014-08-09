@@ -41,9 +41,6 @@ The above copyright notice and this permission notice shall be included in all c
 </head>
 <body>
 
-
-<div style="display:inline;" id="tjs-pagecss"></div>
-<!-- div style="display:inline;" id="tjs-pageeditorheader"></div -->
 <div style="display:inline;" id="tjs-pageheader"></div>
 <div style="display:inline;" id="tjs-filterresults"></div>
 <div style="display:inline;" id="tjs-pagefooter"></div>
@@ -177,7 +174,7 @@ var thingyData = [
     "fields": {}
 },
 {
-    "id": "thingyHeader",
+    "id": "_thingyHeader",
     "thingy": "<div class='thingy'>",
     "about":"",
     "parent":"",
@@ -197,7 +194,7 @@ var thingyData = [
     "fields": {}
 },
 {
-    "id": "thingyFooter",
+    "id": "_thingyFooter",
     "thingy": "</div>",
     "about":"",
     "parent":"",
@@ -313,8 +310,22 @@ var thingyData = [
     "fields": {}
 },
 {
-    "id": "Thingy 6",
-    "thingy": "<br>------------ HEADER ---------------<br>",
+    "id": "_break",
+    "thingy": "<br>",
+    "about":"A simple line break",
+    "parent":"",
+    "created": "2014-07-30T18:17",
+    "active": true,
+    "format":"html",
+    "dataSource":"",
+	"ignoreIncludes":false,
+	"sort":0,
+    "tags": [],
+    "fields": {}
+},
+{
+    "id": "_listAll",
+    "thingy": "All non-system thingies:<br>[[#el.id.substr(0, 1)!== '_'/altel id/linked title/header _break]]<br><br>All system thingies:<br>[[#el.id.substr(0, 1)=== '_'/altel id/linked altel id/header _break]]",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -322,8 +333,8 @@ var thingyData = [
     "format":"html",
     "dataSource":"",
 	"ignoreIncludes":false,
-	"sort":5,
-    "tags": ["green","blue"],
+	"sort":0,
+    "tags": [],
     "fields": {}
 },
 {
@@ -433,7 +444,7 @@ var thingyData = [
 	"active": "true",
 	"format": "markdown",
 	"datasource": "",
-	"ignoreincludes": "false",
+	"ignoreIncludes": "false",
 	"sort": "0",
 	"tags": 0
 },
@@ -446,7 +457,7 @@ var thingyData = [
 	"active": true,
 	"format": "html",
 	"datasource": "",
-	"ignoreincludes": "false",
+	"ignoreIncludes": "false",
 	"sort": "0",
 	"tags": 0
 },
@@ -458,8 +469,8 @@ var thingyData = [
 	"created": "2014-07-30T18:17",
 	"active": true,
 	"format": "html",
-	"datasource": "",
-	"ignoreincludes": "false",
+	"dataSource": "",
+	"ignoreIncludes": "false",
 	"sort": 1000,
 	"tags": 0,
 	"homepage": false,
@@ -549,11 +560,11 @@ $(document).on('click', ".thingybutton", function(){
 			thingyData[i].thingy = thingyTo$criptTag($('#editthingy').val());
 			thingyData[i].parent = $('#editparent').val();
 			thingyData[i].about = $('#editabout').val();
-			thingyData[i].active = $('#editactive').val();
+			if($('#editactive').val() === "true"){thingyData[i].active = true;}else{thingyData[i].active = false;}
 			thingyData[i].format = $('#editformat').val();
-			thingyData[i].datasource = $('#editdatasource').val();
-			thingyData[i].ignoreincludes = $('#editignoreincludes').val();
-			thingyData[i].sort = $('#editsort').val();
+			thingyData[i].dataSource = $('#editdatasource').val();
+			if($('#editignoreincludes').val() === "true"){thingyData[i].ignoreIncludes = true;}else{thingyData[i].ignoreIncludes = false;}
+			thingyData[i].sort = Number($('#editsort').val());
 			thingyData[i].tags = eval($('#edittags').val());
 			//alert($('#editfields').val());
 			//JSON.parse(ff)
@@ -561,12 +572,20 @@ $(document).on('click', ".thingybutton", function(){
 			//thingyData[i].fields = eval($('#editfields').val());
 			thingyData[i].created = $('#editcreated').val();
 			
-			thingyData[i].homepage = $('#edithomepage').val();
-			thingyData[i].systemHeader = $('#editsystemheader').val();
-			thingyData[i].thingyHeader = $('#editthingyheader').val();
-			thingyData[i].editModeOnly = $('#editeditmodeonly').val();
-			thingyData[i].systemFooter = $('#editsystemfooter').val();
-			thingyData[i].thingyFooter = $('#editthingyfooter').val();
+			if($('#edithomepage').val() === "true"){thingyData[i].homepage = true;}else{thingyData[i].homepage = false;}
+			//thingyData[i].homepage = $('#edithomepage').val();
+			if($('#editsystemheader').val() === "true"){thingyData[i].systemHeader = true;}else{thingyData[i].systemHeader = false;}
+			//thingyData[i].systemHeader = $('#editsystemheader').val();
+			if($('#editthingyheader').val() === "true"){thingyData[i].thingyHeader = true;}else{thingyData[i].thingyHeader = false;}
+			//thingyData[i].thingyHeader = $('#editthingyheader').val();
+			if($('#editeditmodeonly').val() === "true"){thingyData[i].editModeOnly = true;}else{thingyData[i].editModeOnly = false;}
+			//thingyData[i].editModeOnly = $('#editeditmodeonly').val();
+			if($('#editsystemfooter').val() === "true"){thingyData[i].systemFooter = true;}else{thingyData[i].systemFooter = false;}
+			//thingyData[i].systemFooter = $('#editsystemfooter').val();
+			if($('#editthingyfooter').val() === "true"){thingyData[i].thingyFooter = true;}else{thingyData[i].thingyFooter = false;}
+			//thingyData[i].thingyFooter = $('#editthingyfooter').val();
+			
+			
 			break;
 		}
 	}
@@ -657,13 +676,22 @@ function thingyParse(id, hashModel, altel, linked, keys){
 	var res = "";
 	var thingy = "";
 	
-	thingy = row.thingy;
-
-	if(linked){ thingy = "<a href='#" + id + "'>" + thingy + "</a>";}
-
+	if(altel){ 
+		thingy = row[altel]; // Alternative element for the thingy result (often just the ID)
+	}else{
+		thingy = row.thingy; // Return the standard thingy - default
+	}
+	
+	if(linked){
+		if(linked === "_$LINKED$_"){
+			thingy = "<a href='#" + id + "'>" + thingy + "</a>";
+		}else{
+			thingy = "<a href='#" + id + "/" + linked + "'>" + thingy + "</a>";
+		}
+	}
+	
+	// If an alternative element was used for the thingy, there is no need to continue. 99 out of 100 this will just be the ID of the thingy.
 	if(altel){
-		thingy = row[altel];
-		if(linked){ thingy = "<a href='#" + id + "'>" + thingy + "</a>";}
 		return thingy;
 	}
 	
@@ -838,7 +866,10 @@ function thingyParseObject(filter, attrs, include, level, section){
 	var append = false;
 	var title = "_$NO TITLE$_";
 	var altel = "";
-	var linked = false;
+	var linked = "";
+	var nothingyheader = false; // ignore thingyheaders
+	var nothingyfooter = false; // ignore thingyfooters
+	
 	for(var i = 0; i < attrs.length; i++){
 		
 		attrs[i] = $.trim(attrs[i]);
@@ -861,10 +892,23 @@ function thingyParseObject(filter, attrs, include, level, section){
 			altel = $.trim(attrs[i].substr(6, attrs[i].length));
 		}
 		if(attrs[i].substr(0, 6) === "linked"){
-			linked = true;
+			//linked = true;
+			linked = attrs[i].substr(7, attrs[i].length);
+			//log(filter + " :|: " + linked);
+			
+			linked = $.trim(linked);
+			//log(attrs[i] + " | " + linked);
+			if(linked === ""){linked = "_$LINKED$_"};
+			//log(attrs[i] + " | " + linked);
 		}
 		if(attrs[i].substr(0, 6) === "append"){
 			append = true;
+		}
+		if(attrs[i].substr(0, 8) === "noheader"){
+			nothingyheader = true;
+		}
+		if(attrs[i].substr(0, 8) === "nofooter"){
+			nothingyfooter = true;
 		}
 		if(attrs[i].substr(0, 6) === "header"){
 			header = $.trim(attrs[i].substr(7, attrs[i].length));
@@ -886,8 +930,10 @@ function thingyParseObject(filter, attrs, include, level, section){
 				return el.id === model;
 			});
 			model = model[0];
+			
 			model = JSON.stringify(model);
 		}
+		//alert(JSON.stringify(model));
 	}
 	
 	var row = thingyClosureFilter(thingyData, filter, sort);
@@ -896,7 +942,7 @@ function thingyParseObject(filter, attrs, include, level, section){
 	for(var i = 0; i < row.length; i++) {
 		
 		// Include thingy headers
-		if(level === 1 && section === "tjs-filterresults"){
+		if(level === 1 && section === "tjs-filterresults" && nothingyheader === false){
 			if(thingyMode === "editmode"){
 				var r = thingyClosureFilter(thingyData, "el.thingyHeader===true", ["desc", "sort"]);
 			}else{
@@ -907,7 +953,10 @@ function thingyParseObject(filter, attrs, include, level, section){
 			}
 		}
 		
-		// TODO: Add header(attr) here and footer after 
+		// Add headers from the hash attributes
+		if(header){
+			tt += thingyParse(header);
+		}
 		
 		// Add the title if requested in the filter attributes
 		if(title === "_$NO TITLE$_"){
@@ -918,10 +967,16 @@ function thingyParseObject(filter, attrs, include, level, section){
 			tt += "<h1>"+title+"</h1>";
 		}
 		
+		
 		tt += thingyParse(row[i].id, model, altel, linked);
-			
+		
+		// Add footer from the hash attributes
+		if(footer){
+			tt += thingyParse(footer);
+		}
+		
 		// Include thingy footer
-		if(level === 1 && section === "tjs-filterresults"){
+		if(level === 1 && section === "tjs-filterresults" && nothingyfooter === false){
 			if(thingyMode === "editmode"){
 				var r = thingyClosureFilter(thingyData, "el.thingyFooter===true", ["desc", "sort"]);
 			}else{
@@ -1203,13 +1258,16 @@ thingyDrawEdit = function(model){
 
 function thingySaveThingy(){
 	
-	var saveit1 = $("#tjs-pageheader").html(); 
-	var saveit2 = $("#tjs-filterresults").html(); 
-	var saveit3 = $("#tjs-pagefooter").html(); 
+	var saveit1 = $("#tjs-pageheader").html();
+	var saveit2 = $("#tjs-filterresults").html();
+	var saveit3 = $("#tjs-pagefooter").html();
 	
 	$("#thingydata").text("\nvar thingyData = \n" + JSON.stringify(thingyData, null, '\t') + ";");
-
-	$("#tjs-filterresults").html(""); 
+	
+	$("#tjs-pageheader").html("");
+	$("#tjs-filterresults").html("");
+	$("#tjs-pagefooter").html("");
+	
 	var html = $('html').clone();
 	
 	var htmlString = html.html();
