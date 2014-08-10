@@ -53,12 +53,11 @@ The above copyright notice and this permission notice shall be included in all c
 
 <script id="thingydata" >
 
-
 var thingyData = [
 {
     "id": "MainThingy",
-    "thingy": "<js>thingyData.length</js>[[Sample Image]] [[Note 4]]{{#each model}}<div>Value: <b>{{id}}</b>: {{thingy}}</div>{{else}}<div>None</div>{{/each}}[[What is ThingyJS?]]",
-    "about":"ThingyJS default thingy. This thingy is called on startup.",
+    "thingy": "[[Sample Image]] [[_systemInfo]][[Note 4]]{{#each model}}<div>Value: <b>{{id}}</b>: {{thingy}}</div>{{else}}<div>None</div>{{/each}}[[What is ThingyJS?]]",
+    "about":"This is the main thingy that has been set to the homepage.",
     "parent":"",
     "created": "2014-07-30T18:17",
     "active": true,
@@ -70,6 +69,26 @@ var thingyData = [
 	"homepage": true,
 	"systemHeader": false,
 	"thingyHeader": false,
+	"editModeOnly":false,
+    "fields": {}
+},
+{
+    "id": "_systemInfo",
+    "thingy": "<h1>System Information</h1>Number of thingies: <js>thingyData.length</js> <js>thingyData.filter(function (el) {return (el.id === 'MainThingy');})[0].about</js>",
+    "about":"This thingy is the header that precedes the main content.",
+    "parent":"",
+    "created": "2014-07-30T18:17",
+    "active": true,
+    "format":"html",
+    "dataSource":"",
+	"ignoreIncludes":false,
+    "sort":1000,
+	"tags": [],
+	"homepage": false,
+	"systemHeader": false,
+	"thingyHeader": false,
+	"systemFooter": false,
+	"thingyFooter": false,
 	"editModeOnly":false,
     "fields": {}
 },
@@ -395,7 +414,7 @@ var thingyData = [
 },
 {
     "id": "_systemDump",
-    "thingy": "<$cript>log(JSON.stringify(thingyData, null, '\t'))</$cript>",
+    "thingy": "<js>log(JSON.stringify(thingyData, null, '\t'))</js>",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -409,7 +428,7 @@ var thingyData = [
 },
 {
     "id": "_systemAlert",
-    "thingy": "<$cript>alert('{{model.alert}}')</$cript>",
+    "thingy": "<js>alert('{{model.alert}}')</js>",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -489,7 +508,7 @@ var thingyData = [
 
 
 <script>
-
+(function(){
 
     /*
     Can be used to keep notes, create templates that populate from notes, can traverse via url, can query via url
@@ -653,6 +672,10 @@ var thingyClosureFilter = function(arr, filter, sort){
 	return obj;
 }
 
+/*
+var batKicks = thingyData.filter(function (el) {return (el.id === "MainThingy");})[0].id;
+alert(batKicks);
+*/
 
 function thingyTools(thingy,id){
 	
@@ -1390,7 +1413,7 @@ $(window).on('hashchange',function(){
 	//thingyWriteAllCssThingies();
 	thingyUpdateScreen(window.location.hash.substring(1),null,1);
 });
-
+})();
 </script>
 
 </body>
