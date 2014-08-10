@@ -833,8 +833,11 @@ function thingyScripts(thingy){
 		if(!fill){
 			fill = eval(filter);
 		}
-		
-		thingy = thingy.replace("<js>" + fullFilter + "</js>", fill);
+		if(fill){
+			thingy = thingy.replace("<js>" + fullFilter + "</js>", fill);
+		}else{
+			thingy = thingy.replace("<js>" + fullFilter + "</js>", "");
+		}
 		
 		cnt++;	
 	}
