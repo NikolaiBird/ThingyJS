@@ -74,7 +74,7 @@ var thingyData = [
 },
 {
     "id": "_systemInfo",
-    "thingy": "<h1>System Information</h1>Number of thingies: <js>thingyData.length</js> <js>thingyData.filter(function (el) {return (el.id === 'MainThingy');})[0].about</js>",
+    "thingy": "<h1>System Information</h1>Number of thingies: [js]thingyData.length[/js] [js]thingyData.filter(function (el) {return (el.id === 'MainThingy');})[0].about[/js]",
     "about":"This thingy is the header that precedes the main content.",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -133,8 +133,8 @@ var thingyData = [
     "fields": {}
 },
 {
-    "id": "_systemEditorHeader",
-    "thingy": "<div class=\"pure-menu pure-menu-open pure-menu-horizontal\"><ul> <li class=\"pure-menu-selected\"><a href=\"#MainThingy\">Home</a></li>\n<li><a href=\"#el.id=='_systemEdit'/model {'id':'Note 2'}\">Edit1</a></li>\n        <li><a href=\"#el.id=='_systemEdit'/thingymodel Get Model\" title=\"Using a seperate thingy to get the model\">Edit2</a></li>\n        <li><a href=\"#el.id=='_systemEdit'/metamodel Note 2\" title=\"Using Metamodel\">Edit3</a></li>\n        <li><a href=\"#_systemDelete/model {'id':'Note 100'}\" title=\"Using ID\">Delete</a></li>\n        <li><a href=\"#_systemEdit/model {'id':''}\">New</a></li>\n <li><a href=\"#_systemAlert/model {'alert':'Hello'}/append\">Alert</a></li>\n        <li><a href=\"#_systemLog/model {'log':'Logged'}/append\">Log</a></li>   <li><a href=\"#_systemDump/append\">Dump</a></li>     <li><a href=\"#_systemSave\">Save</a></li>   </ul></div>",
+    "id": "_editorHeader",
+    "thingy": "<div class=\"pure-menu pure-menu-open pure-menu-horizontal\"><ul> <li class=\"pure-menu-selected\"><a href=\"#MainThingy\">Home</a></li>\n<li><a href=\"#el.id=='_systemEdit'/model {'id':'Note 2'}\">Edit1</a></li> <li><a href=\"#el.id=='_systemEdit'/thingymodel Get Model\" title=\"Using a seperate thingy to get the model\">Edit2</a></li>\n        <li><a href=\"#el.id=='_systemEdit'/metamodel Note 2\" title=\"Using Metamodel\">Edit3</a></li>\n        <li><a href=\"#_delete/model {'id':'Note 100'}\" title=\"Using ID\">Delete</a></li>\n        <li><a href=\"#_systemEdit/model {'id':''}\">New</a></li>\n <li><a href=\"#_alert/model {'alert':'Hello'}/append\">Alert</a></li>\n        <li><a href=\"#_log/model {'log':'Logged'}/append\">Log</a></li>   <li><a href=\"#_systemDump/append\">Dump</a></li><li><a href=\"#_listAll\">List</a></li>  <li><a href=\"#_systemSave\">Save</a></li>   </ul></div>",
     "about":"This thingy is the header that precedes the main content.",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -344,7 +344,7 @@ var thingyData = [
 },
 {
     "id": "_listAll",
-    "thingy": "All non-system thingies:<br>[[#el.id.substr(0, 1)!== '_'/altel id/linked title/header _break]]<br><br>All system thingies:<br>[[#el.id.substr(0, 1)=== '_'/altel id/linked altel id/header _break]]",
+    "thingy": "All non-system thingies:<br>[[#el.id.substr(0, 1)!== '_'/altel id/linked title/header _break]]<br><br>All system thingies:<br>[[#el.id.substr(0, 1)=== '_'/altel id/linked title/header _break]]",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -372,7 +372,7 @@ var thingyData = [
 },
 {
     "id": "_systemEdit",
-    "thingy": "<js>thingyDrawEdit('{{model.id}}')</js>",
+    "thingy": "[js]thingyDrawEdit('{{model.id}}')[/js]",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -385,7 +385,7 @@ var thingyData = [
     "fields": {}
 },
 {
-    "id": "_systemDelete",
+    "id": "_delete",
     "thingy": "<$cript>thingyDelete('{{model.id}}')</$cript>",
     "about":"",
     "parent":"",
@@ -414,7 +414,7 @@ var thingyData = [
 },
 {
     "id": "_systemDump",
-    "thingy": "<js>log(JSON.stringify(thingyData, null, '\t'))</js>",
+    "thingy": "[js]log(JSON.stringify(thingyData, null, '\t'))[/js]",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -427,8 +427,8 @@ var thingyData = [
     "fields": {}
 },
 {
-    "id": "_systemAlert",
-    "thingy": "<js>alert('{{model.alert}}')</js>",
+    "id": "_alert",
+    "thingy": "[js]alert('{{model.alert}}')[/js]",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -441,8 +441,8 @@ var thingyData = [
     "fields": {}
 },
 {
-    "id": "_systemLog",
-    "thingy": "<$cript>log('{{model.log}}')</$cript>",
+    "id": "_log",
+    "thingy": "[js]log('{{model.log}}')[/js]",
     "about":"",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -464,8 +464,9 @@ var thingyData = [
 	"format": "markdown",
 	"datasource": "",
 	"ignoreIncludes": "false",
-	"sort": "0",
-	"tags": 0
+	"sort":0,
+    "tags": [],
+    "fields": {}
 },
 {
 	"id": "Sample Image",
@@ -477,8 +478,15 @@ var thingyData = [
 	"format": "html",
 	"datasource": "",
 	"ignoreIncludes": "false",
-	"sort": "0",
-	"tags": 0
+	"sort":0,
+    "tags": [],
+    "fields": {},
+	"homepage": false,
+	"systemHeader": false,
+	"thingyHeader": false,
+	"systemFooter": false,
+	"thingyFooter": false,
+	"editModeOnly":false
 },
 {
 	"id": "_PureCSS",
@@ -490,10 +498,31 @@ var thingyData = [
 	"format": "html",
 	"dataSource": "",
 	"ignoreIncludes": "false",
-	"sort": 1000,
-	"tags": 0,
+	"sort":1000,
+    "tags": [],
+    "fields": {},
 	"homepage": false,
 	"systemHeader": true,
+	"thingyHeader": false,
+	"systemFooter": false,
+	"thingyFooter": false,
+	"editModeOnly":false
+},
+{
+	"id": "_beforeUnloadWarning",
+	"thingy": "You have unsaved thingies. Are you sure you want to leave?",
+	"about": "If thingies have changed or been created, this is the warning if the user tries to leave ThingyJS or reload before saving.",
+	"parent": "",
+	"created": "2014-07-30T18:17",
+	"active": true,
+	"format": "thingy",
+	"dataSource": "",
+	"ignoreIncludes": "false",
+	"sort": 1000,
+	"tags": [],
+    "fields": {},
+	"homepage": false,
+	"systemHeader": false,
 	"thingyHeader": false,
 	"systemFooter": false,
 	"thingyFooter": false,
@@ -527,12 +556,22 @@ var thingyData = [
 		Make the save function its own function
 		Mode setter: mode blank, editor
     */
-	
+
 thingyMode = "editmode";
 
 $(document).on('click', ".thingybutton", function(){ 
+	var thingyAction = $(this).attr("data-thingy");
+	thingyAction = thingyAction.substr(0, 4);
+	if(thingyAction === "save"){
+		thingySaveThingy(this);
+	}
+	
+	return;
+});
 
-	var oldid = $(this).attr("data-thingy");
+thingySaveThingy = function(e){
+	
+	var oldid = $(e).attr("data-thingy");
 	oldid = oldid.substr(5, oldid.length);
 	oldid = $.trim(oldid);
 	
@@ -540,22 +579,19 @@ $(document).on('click', ".thingybutton", function(){
 	$("#editid").val($.trim($("#editid").val()));
 	$("#editid").val($("#editid").val().replace(/\s{2,}/g,' ')); // trim multiple white space in string
 	if(!$("#editid").val()){
-		//alert
-		thingyUpdateScreen("_systemAlert/model {'alert':'Missing ID. Alphanumeric and spaces only.'}/append");
+		thingyUpdateScreen("_alert/model {'alert':'Missing ID. Alphanumeric and spaces only.'}/append");
 		return;
 	}
 	// Check characters in sting. Alphanumeric, $ and spaces allowed
 	var reg = /^[A-Za-z-_\d\s\$\?\!]+$/;
     if(!reg.test($("#editid").val())){
-		//alert
-		thingyUpdateScreen("_systemAlert/model {'alert':'Bad ID. Alphanumeric, spaces, !, $, ? only.'}/append");
+		thingyUpdateScreen("_alert/model {'alert':'Bad ID. Alphanumeric, spaces, !, $, ? only.'}/append");
 		return;
 	}
 	// Make sure the new ID does not conflict with a current one
 	for(var i=0; i < thingyData.length; i++){
 		if(thingyData[i].id === $("#editid").val() && thingyData[i].id !== oldid){
-			//alert
-			thingyUpdateScreen("_systemAlert/model {'alert':'ID in use. Another thingy already has this ID.'}/append");
+			thingyUpdateScreen("_alert/model {'alert':'ID in use. Another thingy already has this ID.'}/append");
 			return;
 		}
 	}
@@ -604,18 +640,16 @@ $(document).on('click', ".thingybutton", function(){
 			if($('#editthingyfooter').val() === "true"){thingyData[i].thingyFooter = true;}else{thingyData[i].thingyFooter = false;}
 			//thingyData[i].thingyFooter = $('#editthingyfooter').val();
 			
-			
 			break;
 		}
 	}
 	
+	// Bind the beforeunload binding warning
+	$(window).bind('beforeunload', saveBeforeUnloadHandler);
+	
 	window.location.hash="#"+$('#editid').val();
 	
-	//if(e.preventDefault) e.preventDefault(); else e.returnValue = false;
-	//saveThingy();
- });
-
-	
+}
 
 
 
@@ -697,14 +731,24 @@ function thingyParse(id, hashModel, altel, linked, keys){
 	var filter = "el.id === '" + id + "'";
 	var row = thingyClosureFilter(thingyData, filter, "");
 	row = row[0];
-
+	
+	if(!row){
+		log("Error: thingyParse() Missing thingy row.");
+		return false;
+	}
+	
 	var res = "";
 	var thingy = "";
 	
 	if(altel){ 
 		thingy = row[altel]; // Alternative element for the thingy result (often just the ID)
 	}else{
-		thingy = row.thingy; // Return the standard thingy - default
+		//if(row.hasOwnProperty('thingy')){
+			thingy = row.thingy; // Return the standard thingy - default
+		//}else{
+		//	log("Error: thingyParse() Missing thingy property.");
+		//	return false;
+		//}
 	}
 	
 	if(linked){
@@ -733,19 +777,19 @@ function thingyParse(id, hashModel, altel, linked, keys){
 		thingy = thingyFormatting(thingy);
 		thingy = thingyLinks(thingy);
 		thingy = thingyAutoLinks(thingy);
-		thingy = thingyScripts(thingy); // Run internal scripts. <js></js>
+		thingy = thingyScripts(thingy); // Run internal scripts. [js][/js]
 		thingy = thingyToScriptTag(thingy);
 		return thingy;
 	}else if(format === "html"){
 		if(!ignoreIncludes){thingy = thingyIncludeFilters(thingy, keys);} // Find and fill in internal thingy filters
-		thingy = thingyScripts(thingy); // Run internal scripts. <js></js>
+		thingy = thingyScripts(thingy); // Run internal scripts. [js][/js]
 		thingy = thingyToScriptTag(thingy);
 		return thingy;
 	}else if(format === "markdown"){
 		if(!ignoreIncludes){thingy = thingyIncludeFilters(thingy, keys);} // Find and fill in internal thingy filters
 		var converter = new Markdown.Converter();
 		thingy = converter.makeHtml(thingy);
-		thingy = thingyScripts(thingy); // Run internal scripts. <js></js>
+		thingy = thingyScripts(thingy); // Run internal scripts. [js][/js]
 		thingy = thingyToScriptTag(thingy);
 		return thingy;
 	}else if(format === "handlebars"){
@@ -773,7 +817,7 @@ function thingyParse(id, hashModel, altel, linked, keys){
 		
 		thingy = template(model) ;
 		
-		thingy = thingyScripts(thingy); // Run internal scripts. <js></js>
+		thingy = thingyScripts(thingy); // Run internal scripts. [js][/js]
 		thingy = thingyToScriptTag(thingy);
 		return thingy;
     }
@@ -841,14 +885,13 @@ function thingyLinks(thingy){
 
 
 function thingyScripts(thingy){
-	//alert(thingy);
-	//if(thingy.search(/<js>.*<\/js>/) >-1){alert("found");}
 	
 	var cnt = 0;
-	while(thingy.search(/<js>.*<\/js>/) >-1 && cnt <= 1000){
+	//while(thingy.search(/[js].*[\/js]/) >-1 && cnt <= 1000){
+	while(thingy.search(/\[js\].*\[\/js\]/) >-1 && cnt <= 1000){
 		
-		var ff1 = thingy.split("<js>");
-		var ff2 = ff1[1].split("</js>");
+		var ff1 = thingy.split("[js]");
+		var ff2 = ff1[1].split("[/js]");
 		var fullFilter = ff2[0];
 		var filter = $.trim(fullFilter);
 		var fill = "";
@@ -857,9 +900,9 @@ function thingyScripts(thingy){
 			fill = eval(filter);
 		}
 		if(fill){
-			thingy = thingy.replace("<js>" + fullFilter + "</js>", fill);
+			thingy = thingy.replace("[js]" + fullFilter + "[/js]", fill);
 		}else{
-			thingy = thingy.replace("<js>" + fullFilter + "</js>", "");
+			thingy = thingy.replace("[js]" + fullFilter + "[/js]", "");
 		}
 		
 		cnt++;	
@@ -1047,7 +1090,7 @@ function thingyParseObject(filter, attrs, include, level, section){
 		}
 	}
 	
-	if(!append && filter !== "_systemHeader" && filter !== "_systemFooter" && filter !== "_systemEditorHeader"   ){
+	if(!append){
 		thingyClearScreen();
 	}
 	
@@ -1090,7 +1133,7 @@ function thingyUpdateScreen(hash,section,level){
 	
 	if(hash.substr(0, 11) === "_systemSave"){
 		// For now this has to be hard coded because I am getting infinite loop when cloning the code when in a thingy
-		thingySaveThingy();
+		thingySave();
 	}else{
 		var thingy = thingyHashChange(hash,null,level, section);
 		
@@ -1125,8 +1168,6 @@ thingyDelete = function(id){
 }
 
 thingyDrawEdit = function(model){
-	
-	//alert("drawEdit: " + model);
 	
 	if(typeof model === 'object'){
 		// Good. Do nothing
@@ -1319,7 +1360,7 @@ thingyDrawEdit = function(model){
 
 
 
-function thingySaveThingy(){
+function thingySave(){
 	
 	var saveit1 = $("#tjs-pageheader").html();
 	var saveit2 = $("#tjs-filterresults").html();
@@ -1342,6 +1383,9 @@ function thingySaveThingy(){
 	$("#tjs-pageheader").html(saveit1);
 	$("#tjs-filterresults").html(saveit2);
 	$("#tjs-pagefooter").html(saveit3);
+	
+	// Unbind the beforeunload binding warning
+	$(window).unbind('beforeunload', saveBeforeUnloadHandler);
 	
 }
 
@@ -1408,6 +1452,17 @@ thingyUpdateScreen(window.location.hash.substring(1),null,1);
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
+var saveBeforeUnloadHandler = function() {
+	//var thingyData.filter(function (el) {return (el.id === '_beforeUnloadWarning')})[0].thingy;
+	//thingyParse("_beforeUnloadWarning");
+	if(thingyParse("_beforeUnloadWarning")){
+		return thingyParse("_beforeUnloadWarning")
+	}else{
+		return 'You have unsaved thingies. Are you sure you want to leave?';
+	}
+};
+
+//alert(thingyParse("_beforeUnloadWarningff"));
 
 $(window).on('hashchange',function(){
 	//thingyWriteAllCssThingies();
