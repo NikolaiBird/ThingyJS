@@ -543,8 +543,8 @@ var thingyData = [
 	"editModeOnly":false
 },
 {
-	"id": "_thingyJSSettings",
-	"thingy": "[{'password':ture}]",
+	"id": "_thingyjsSettings",
+	"thingy": "'thingyPassword':true,'thingyMode':'editmode'",
 	"about": "These are the thingyJS settings.",
 	"parent": "",
 	"created": "2014-07-30T18:17",
@@ -565,7 +565,7 @@ var thingyData = [
 
 ];
 
-thingyData = "LgBzFpnT6VMTZ7gS6UcT0jLkiqNl";
+//thingyData = "LgBzFpnT6VMTZ7gS6UcT0jLkiqNl"; // password: ccc
 
 </script>
 
@@ -575,11 +575,6 @@ thingyData = "LgBzFpnT6VMTZ7gS6UcT0jLkiqNl";
 <script>
 
 (function(){
-	
-	if(JSON.stringify(thingyData).search(":") === -1){
-		// thingyData is encrypted. It needs to be decrypted.
-		thingyDecrypt();
-	}
 	
 	/*
 	var password = prompt("Password", "");
@@ -607,8 +602,8 @@ thingyData = "LgBzFpnT6VMTZ7gS6UcT0jLkiqNl";
 		
     */
 
-thingyMode = "editmode";
-thingyPassword = "";
+
+
 
 $(document).on('click', ".thingybutton", function(){ 
 	var thingyAction = $(this).attr("data-thingy");
@@ -767,7 +762,7 @@ function thingyParse(id, hashModel, altel, linked, keys){
 	// linked is when for example you only show the id of a thingy and want that id to link to the full thingy.
 	// keys look like this: {"_parentid":"value"}
 	
-	//alert(id + " | " + hashModel);
+	//alert(id + " | " + linked);
 	
 	var filter = "el.id === '" + id + "'";
 	var row = thingyClosureFilter(thingyData, filter, "");
@@ -1450,7 +1445,7 @@ function thingyModeCheck(){
 		window.location.hash = window.location.hash.replace("/blankmode","");
 	};
 	
-}; thingyModeCheck();
+};
 
 // Write the system headers
 function thingyWriteAllSystemHeaders(){
@@ -1466,7 +1461,7 @@ function thingyWriteAllSystemHeaders(){
 		thingyUpdateScreen(r[i].id, "tjs-pageheader")
 	}
 	//alert(thingyMode);
-}; thingyWriteAllSystemHeaders();
+};
 
 
 
@@ -1484,18 +1479,16 @@ function thingyWriteAllSystemFooter(){
 		thingyUpdateScreen(r[i].id, "tjs-pagefooter")
 	}
 	
-}; thingyWriteAllSystemFooter();
+};
 
 
 
-thingyUpdateScreen(window.location.hash.substring(1),null,1);
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
 var saveBeforeUnloadHandler = function() {
-	//var thingyData.filter(function (el) {return (el.id === '_beforeUnloadWarning')})[0].thingy;
-	//thingyParse("_beforeUnloadWarning");
 	if(thingyParse("_beforeUnloadWarning")){
 		return thingyParse("_beforeUnloadWarning")
 	}else{
@@ -1533,12 +1526,44 @@ function thingyDecrypt(){
 	*/
 }
 
-//alert(thingyParse("_beforeUnloadWarningff"));
+
+/////////////////////////////////////////////// SETTINGS //////////////////////////////////////
+// Get the settings. If not set them using defaults.
+
+thingyMode = "editmode";
+thingyPassword = false;
+
+// Use the "_thingyjsSettings" thingy and in the thingy data put 'key':'val','key':'val'
+var thingyjsSettings = thingyParse("_thingyjsSettings");
+if(thingyjsSettings){
+	thingyjsSettings = eval("[{"+thingyjsSettings+"}]"); thingyjsSettings = thingyjsSettings[0];
+	if(thingyjsSettings.hasOwnProperty('thingyMode')){
+		thingyMode = thingyjsSettings.thingyMode;
+	}
+	if(thingyjsSettings.hasOwnProperty('thingyPassword')){
+		thingyPassword = thingyjsSettings.thingyPassword;
+	}
+}
+
+
+
+
+
+if(JSON.stringify(thingyData).search(":") === -1){
+	// thingyData is encrypted. It needs to be decrypted.
+	thingyDecrypt();
+}
+
+thingyModeCheck();
+thingyWriteAllSystemHeaders();
+thingyWriteAllSystemFooter();
+thingyUpdateScreen(window.location.hash.substring(1),null,1);
 
 $(window).on('hashchange',function(){
 	//thingyWriteAllCssThingies();
 	thingyUpdateScreen(window.location.hash.substring(1),null,1);
 });
+
 })();
 </script>
 
