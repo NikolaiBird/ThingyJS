@@ -543,12 +543,12 @@ var thingyData = [
 	"editModeOnly":false
 },
 {
-	"id": "_aesEncryption",
-	"thingy": "true",
-	"about": "This tells ThingyJS whether or not to use AES encryption. true or false.",
+	"id": "_thingyJSSettings",
+	"thingy": "[{'password':ture}]",
+	"about": "These are the thingyJS settings.",
 	"parent": "",
 	"created": "2014-07-30T18:17",
-	"active": true,
+	"active": false,
 	"format": "thingy",
 	"dataSource": "",
 	"ignoreIncludes": "false",
@@ -565,6 +565,7 @@ var thingyData = [
 
 ];
 
+thingyData = "LgBzFpnT6VMTZ7gS6UcT0jLkiqNl";
 
 </script>
 
@@ -575,15 +576,18 @@ var thingyData = [
 
 (function(){
 	
+	if(JSON.stringify(thingyData).search(":") === -1){
+		// thingyData is encrypted. It needs to be decrypted.
+		thingyDecrypt();
+	}
 	
-	
-	//var password = prompt("Password", "");
-	encoded = Aes.Ctr.encrypt(JSON.stringify(thingyData, null, '\t'), "This is a password", 256);
-	alert(encoded.search(":"));
-	decoded = Aes.Ctr.decrypt(encoded, "This is a password", 256);
-	thingyData = eval(decoded);
+	/*
+	var password = prompt("Password", "");
+	encoded = Aes.Ctr.encrypt("Hello : World", password, 256);
+	decoded = Aes.Ctr.decrypt(encoded, password, 256);
 	console.log(encoded);
-
+	*/
+	
     /*
     Can be used to keep notes, create templates that populate from notes, can traverse via url, can query via url
     Whole pages can be created using templates, css and notes
@@ -604,6 +608,7 @@ var thingyData = [
     */
 
 thingyMode = "editmode";
+thingyPassword = "";
 
 $(document).on('click', ".thingybutton", function(){ 
 	var thingyAction = $(this).attr("data-thingy");
@@ -1497,6 +1502,36 @@ var saveBeforeUnloadHandler = function() {
 		return 'You have unsaved thingies. Are you sure you want to leave?';
 	}
 };
+
+function thingyEncrypt(){
+	if(thingyPassword === ""){
+		thingyPassword = prompt("Password", "");
+	}
+}
+
+function thingyDecrypt(){
+	
+	//if(thingyData.search(":") === -1){
+		while(thingyData.search(":") === -1){
+			thingyPassword = prompt("Password", "");
+			var decoded = Aes.Ctr.decrypt(thingyData, thingyPassword, 256);
+			if(decoded.search(":") > -1){
+				thingyData = eval(decoded);
+			}
+		}
+	//}
+	
+	return;
+	
+	/*
+	//var password = prompt("Password", "");
+	encoded = Aes.Ctr.encrypt(JSON.stringify(thingyData, null, '\t'), "This is a password", 256);
+	alert(encoded.search(":"));
+	decoded = Aes.Ctr.decrypt(encoded, "This is a password", 256);
+	thingyData = eval(decoded);
+	console.log(encoded);
+	*/
+}
 
 //alert(thingyParse("_beforeUnloadWarningff"));
 
