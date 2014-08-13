@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<link rel="shortcut icon" href="#">
+
     <title>ThingyJS</title>
  
 
@@ -61,6 +63,16 @@ var Utf8={};Utf8.encode=function(e){var t=e.replace(/[\u0080-\u07ff]/g,function(
     <!-- Sample handlebars template. Not used. Can be deleted. -->
 </script>
 
+<script>
+	var favIcon = "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";
+
+	var docHead = document.getElementsByTagName('head')[0];       
+	var newLink = document.createElement('link');
+	newLink.rel = 'shortcut icon';
+	newLink.href = 'data:image/png;base64,'+favIcon;
+	docHead.appendChild(newLink);
+</script>
+
 
 
 <script id="thingydata" >
@@ -108,7 +120,7 @@ var thingyData = [
 },
 {
     "id": "_systemHeader",
-    "thingy": "<h1>Thingy Notes</h1>",
+    "thingy": "<h1 style='margin-left:20px'><img width=\"48\" src=\"data:image/png;base64,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\" alt=\"RoboBear\"  style='margin-right:20px' />Thingy Notes</h1>",
     "about":"This thingy is the header that precedes the main content.",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -544,7 +556,7 @@ var thingyData = [
 },
 {
 	"id": "_thingyjsSettings",
-	"thingy": "'thingyPassword':true,'thingyMode':'editmode'",
+	"thingy": "'thingyUsePassword':true,'thingyMode':'editmode'",
 	"about": "These are the thingyJS settings.",
 	"parent": "",
 	"created": "2014-07-30T18:17",
@@ -599,6 +611,7 @@ var thingyData = [
 		Limit number of recursive self calling thingies to 500 or ban them
 		Add math formulas
 		Make the save function its own function
+		What happens if there are 0 thingies? Encryption
 		
     */
 
@@ -1398,11 +1411,25 @@ thingyDrawEdit = function(model){
 
 function thingySave(){
 	
+	var okToGo = true;
+	
 	var saveit1 = $("#tjs-pageheader").html();
 	var saveit2 = $("#tjs-filterresults").html();
 	var saveit3 = $("#tjs-pagefooter").html();
 	
-	$("#thingydata").text("\nvar thingyData = \n" + JSON.stringify(thingyData, null, '\t') + ";");
+	if(thingyUsePassword){
+		//alert("Use Password");
+		if(!thingyEncrypt()){
+			return;
+		}
+		$("#thingydata").text("\nvar thingyData = \"" + thingyData + "\";\n");
+	}else{
+		$("#thingydata").text("\nvar thingyData = \n" + JSON.stringify(thingyData, null, '\t') + ";\n");
+	}
+	
+	
+	
+	
 	
 	$("#tjs-pageheader").html("");
 	$("#tjs-filterresults").html("");
@@ -1497,62 +1524,90 @@ var saveBeforeUnloadHandler = function() {
 };
 
 function thingyEncrypt(){
-	if(thingyPassword === ""){
-		thingyPassword = prompt("Password", "");
+	
+	if(!thingyPassword){
+		var pass1 = "#2%@9&%$£80";
+		var pass2 = "#2%@9&%$£80";
+		while(pass1 === "#2%@9&%$£80" || pass2 === "#2%@9&%$£80" || pass1 !== pass2){
+			
+			while(pass1 === "#2%@9&%$£80" || pass1 === ""){
+				var pass1 = prompt("Password", "");
+				if(!pass1){ alert("Data not saved."); return false;}
+			}
+			
+			while(pass2 === "#2%@9&%$£80" || pass2 === ""){
+				var pass2 = prompt("Password again", "");
+				if(!pass2){ alert("Data not saved."); return false;}
+			}
+			
+			if(pass1 === pass2){
+				thingyPassword = pass1;
+				break;
+			}else{
+				alert("Passwords do not match. Try again.");
+				pass1 = "#2%@9&%$£80";
+				pass2 = "#2%@9&%$£80";
+			}
+			
+		}
 	}
+	
+	if(!thingyPassword){
+		alert("Data not saved.");
+		return false;
+	}else{
+		thingyData = Aes.Ctr.encrypt(JSON.stringify(thingyData, null, '\t'), thingyPassword, 256);
+		return true;
+	}
+	
 }
 
 function thingyDecrypt(){
-	
-	//if(thingyData.search(":") === -1){
-		while(thingyData.search(":") === -1){
-			thingyPassword = prompt("Password", "");
-			var decoded = Aes.Ctr.decrypt(thingyData, thingyPassword, 256);
-			if(decoded.search(":") > -1){
-				thingyData = eval(decoded);
-			}
+		
+	while(thingyData.search(":") === -1){
+		thingyPassword = prompt("Encryption Password", "");
+		var decoded = Aes.Ctr.decrypt(thingyData, thingyPassword, 256);
+		if(decoded.search(":") > -1 && decoded.search("id") > -1 && decoded.search("thingy") > -1 && decoded.search("format") > -1 ){
+			thingyData = eval(decoded);
+			break;
 		}
-	//}
-	
-	return;
-	
-	/*
-	//var password = prompt("Password", "");
-	encoded = Aes.Ctr.encrypt(JSON.stringify(thingyData, null, '\t'), "This is a password", 256);
-	alert(encoded.search(":"));
-	decoded = Aes.Ctr.decrypt(encoded, "This is a password", 256);
-	thingyData = eval(decoded);
-	console.log(encoded);
-	*/
-}
-
-
-/////////////////////////////////////////////// SETTINGS //////////////////////////////////////
-// Get the settings. If not set them using defaults.
-
-thingyMode = "editmode";
-thingyPassword = false;
-
-// Use the "_thingyjsSettings" thingy and in the thingy data put 'key':'val','key':'val'
-var thingyjsSettings = thingyParse("_thingyjsSettings");
-if(thingyjsSettings){
-	thingyjsSettings = eval("[{"+thingyjsSettings+"}]"); thingyjsSettings = thingyjsSettings[0];
-	if(thingyjsSettings.hasOwnProperty('thingyMode')){
-		thingyMode = thingyjsSettings.thingyMode;
 	}
-	if(thingyjsSettings.hasOwnProperty('thingyPassword')){
-		thingyPassword = thingyjsSettings.thingyPassword;
-	}
+
+	return;	
 }
 
 
 
-
-
+// Test to see if thingyData is encrypted
 if(JSON.stringify(thingyData).search(":") === -1){
 	// thingyData is encrypted. It needs to be decrypted.
 	thingyDecrypt();
 }
+
+/////////////////////////////////////////////// SETTINGS //////////////////////////////////////
+
+// Get the settings. If not set them using defaults.
+thingyMode = "editmode";
+thingyUsePassword = false;
+thingyPassword = "";
+
+// Use the "_thingyjsSettings" thingy and in the thingy data put 'key':'val','key':'val'
+var thingyjsSettings = thingyParse("_thingyjsSettings");
+if(thingyjsSettings){
+	thingyjsSettings = eval("[{"+thingyjsSettings+"}]"); 
+	thingyjsSettings = thingyjsSettings[0];
+	if(thingyjsSettings.hasOwnProperty('thingyMode')){
+		thingyMode = thingyjsSettings.thingyMode;
+	}
+	if(thingyjsSettings.hasOwnProperty('thingyUsePassword')){
+		thingyUsePassword = thingyjsSettings.thingyUsePassword;
+	}
+}
+
+
+
+
+
 
 thingyModeCheck();
 thingyWriteAllSystemHeaders();
