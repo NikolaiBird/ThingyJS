@@ -83,7 +83,7 @@ var thingyEncryptedTest = "This is not encrypted";
 var thingyData = [
 {
     "id": "MainThingy",
-    "thingy": "[[Sample Image]] [[_systemInfo]][[Note 4]]{{#each model}}<div>Value: <b>{{id}}</b>: {{thingy}}</div>{{else}}<div>None</div>{{/each}}[[What is ThingyJS?]]",
+    "thingy": "[js]thingyParse('_systemInfo')[/js][[Sample Image]] [[_systemInfo]][[Note 4]]{{#each model}}<div>Value: <b>{{id}}</b>: {{thingy}}</div>{{else}}<div>None</div>{{/each}}[[What is ThingyJS?]]",
     "about":"This is the main thingy that has been set to the homepage.",
     "parent":"",
     "created": "2014-07-30T18:17",
@@ -1000,7 +1000,7 @@ function thingyIncludeFilters(thingy, keys){
 }
 
 function thingyAutoLinks(thingy){
-	var res = Autolinker.link( thingy, { stripPrefix : false });
+	var res = Autolinker.link( thingy, { stripPrefix : false, newWindow: false });
 	return res;
 }
 
